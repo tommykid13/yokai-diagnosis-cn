@@ -1,78 +1,23 @@
-// 簡易測驗腳本
-document.addEventListener('DOMContentLoaded', () => {
-  const startBtn = document.getElementById('start-diagnosis');
-  const quizModal = document.getElementById('quizModal');
-  const resultModal = document.getElementById('resultModal');
-  const closeQuizBtn = document.getElementById('closeModal');
-  const closeResultBtn = document.getElementById('closeResult');
-  const quizForm = document.getElementById('quizForm');
-  const resultTitle = document.getElementById('resultTitle');
-  const resultDesc = document.getElementById('resultDesc');
-
-  // 顯示測驗框
-  startBtn.addEventListener('click', () => {
-    quizModal.classList.remove('hidden');
-  });
-
-  // 關閉測驗框
-  closeQuizBtn.addEventListener('click', () => {
-    quizModal.classList.add('hidden');
-  });
-
-  // 提交測驗
-  quizForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const formData = new FormData(quizForm);
-    const counts = {};
-    for (const value of formData.values()) {
-      counts[value] = (counts[value] || 0) + 1;
-    }
-    // 選擇票數最高的妖怪類型
-    let topType = null;
-    let maxCount = 0;
-    for (const type in counts) {
-      if (counts[type] > maxCount) {
-        topType = type;
-        maxCount = counts[type];
-      }
-    }
-    // 映射說明
-    const info = {
-      kitsune: {
-        title: '妖狐 (Kitsune)',
-        desc:
-          '您聰明伶俐，擅長觀察與思考，偶爾帶點狡黠。就像妖狐一樣，能夠善用智慧達成目標。',
-      },
-      oni: {
-        title: '鬼 (Oni)',
-        desc:
-          '您充滿力量與熱情，重視正義感。雖然外表強悍，但內心其實柔軟。就像鬼一樣，是值得信賴的守護者。',
-      },
-      yuki: {
-        title: '雪女 (Yuki-onna)',
-        desc:
-          '您性格內斂沉著，給人優雅高冷的感覺。像雪女般擁有冰雪般的氣質與神秘魅力。',
-      },
-      kappa: {
-        title: '河童 (Kappa)',
-        desc:
-          '您天生好奇且充滿童心，喜歡嘗試新奇事物。就像河童般調皮可愛，是群體中的開心果。',
-      },
-    };
-    const result = info[topType] || {
-      title: '未知妖怪',
-      desc: '您是獨一無二的存在，超越了傳統妖怪的分類！',
-    };
-    resultTitle.textContent = result.title;
-    resultDesc.textContent = result.desc;
-    quizModal.classList.add('hidden');
-    resultModal.classList.remove('hidden');
-  });
-
-  // 關閉結果框
-  closeResultBtn.addEventListener('click', () => {
-    resultModal.classList.add('hidden');
-    // 重置表單以便下次填寫
-    quizForm.reset();
-  });
+const YOKAI = {
+  kitsune:{name:'妖狐',img:'assets/yokai/kitsune.png',desc:'狡猾、機智又帶點惡作劇。'},
+  oni:{name:'鬼',img:'assets/yokai/oni.png',desc:'強悍直接，重視力量與榮耀。'},
+  yuki:{name:'雪女',img:'assets/yokai/yuki.png',desc:'沉著寧靜，給人清冷之感。'},
+  kappa:{name:'河童',img:'assets/yokai/kappa.png',desc:'熱愛水域，好奇心旺盛。'},
+  tengu:{name:'天狗',img:'assets/yokai/tengu.png',desc:'擅長乘風，居高臨下。'},
+  tanuki:{name:'狸貓',img:'assets/yokai/tanuki.png',desc:'愛惡作劇，也喜歡變身。'},
+  rokuro:{name:'轆轤首',img:'assets/yokai/rokuro.png',desc:'能伸長脖子，夜行嚇人。'},
+  nura:{name:'滑頭鬼',img:'assets/yokai/nura.png',desc:'神出鬼沒，行蹤不定。'}
+};
+const QUESTIONS=[
+{id:1,text:'你偏好的時間？',opts:['清晨','炎午','黃昏','午夜','風雨夜','雪夜','濃霧','月夜'],map:['kitsune','kappa','tanuki','nura','oni','yuki','rokuro','tengu'],next:2},
+{id:2,text:'遇到挑戰，你通常？',opts:['智取','硬扛','觀察','試水','乘風而去','變個把戲','伸長脖子偷看','靜待時機'],map:['kitsune','oni','yuki','kappa','tengu','tanuki','rokuro','nura'],next:3},
+{id:3,text:'最喜歡棲息環境？',opts:['竹林','火山口','冰原','河岸','高山','神社旁','古井','屋瓦'],map:['kitsune','oni','yuki','kappa','tengu','tanuki','rokuro','nura'],next:null}
+];
+let answers=[],rngBonus=0,current=1,bgm=new Audio('assets/bgm.mp3'),first=false;
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('startBtn').addEventListener('click',startQuiz);
 });
+function startQuiz(){document.querySelector('.hero').style.display='none';document.getElementById('quiz').style.display='block';renderQ();}
+function renderQ(){const q=QUESTIONS.find(q=>q.id===current);if(!q)return;document.getElementById('question').textContent=q.text;const ops=document.getElementById('options');ops.innerHTML='';q.opts.forEach((o,i)=>{const b=document.createElement('button');b.textContent=o;b.onclick=()=>pick(i);ops.appendChild(b);});}
+function pick(i){if(!first){bgm.play();first=true;}const q=QUESTIONS.find(q=>q.id===current);answers.push(q.map[i]);current=q.next;current?renderQ():result();}
+function result(){const tally={};answers.forEach(a=>tally[a]=(tally[a]||0)+1);const main=Object.entries(tally).sort((a,b)=>b[1]-a[1])[0][0];document.getElementById('quiz').innerHTML=`<h2>你是 ${YOKAI[main].name}！</h2><img src="${YOKAI[main].img}" style="width:200px"><p>${YOKAI[main].desc}</p><button onclick="location.reload()">再測一次</button>`;}
