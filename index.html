@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>妖怪診斷</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="lang-switcher">
+        <!-- 語言切換按鈕：僅顯示用於示意，實際上可依需求導向不同語言版本 -->
+        <button class="lang-btn">日語&nbsp;JP</button>
+        <button class="lang-btn">英語&nbsp;EN</button>
+        <button class="lang-btn active">中文&nbsp;ZH</button>
+      </div>
+      <!-- 右上角設定按鈕，可替換為其他功能圖示 -->
+      <button class="settings-btn" aria-label="設置">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="3"></circle>
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V22a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.37a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.63 15 1.65 1.65 0 0 0 3 14V12a2 2 0 0 1 0-4v-.09A1.65 1.65 0 0 0 4.63 7a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.63 1.65 1.65 0 0 0 10 3h.09A2 2 0 0 1 14 3v.09a1.65 1.65 0 0 0 1 .33 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.37 9a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.24l-.06.06A1.65 1.65 0 0 0 19.37 15z"
+          ></path>
+        </svg>
+      </button>
+    </header>
+    <main>
+      <section class="hero">
+        <h1>妖怪診斷：你內心潛藏著哪種妖怪？</h1>
+        <p class="tagline">讓陰陽師之眼揭示你靈魂深處的妖怪。</p>
+        <p class="subtagline">探索你是&nbsp;8&nbsp;種妖怪中的哪一種！</p>
+        <button id="start-diagnosis" class="primary-btn">開始診斷</button>
+      </section>
+      <!-- 巫女形象 -->
+      <img
+        src="miko.png"
+        alt="巫女"
+        class="miko"
+      />
+    </main>
+
+    <!-- 簡易診斷視窗 -->
+    <div class="modal hidden" id="quizModal">
+      <div class="modal-content">
+        <h2>簡易妖怪測驗</h2>
+        <form id="quizForm">
+          <div class="question">
+            <p>1.&nbsp;你更偏好以下哪種活動？</p>
+            <label><input type="radio" name="q1" value="kitsune" required /> 智力遊戲或謎題</label>
+            <label><input type="radio" name="q1" value="oni" /> 體力運動或競賽</label>
+            <label><input type="radio" name="q1" value="yuki" /> 靜態欣賞自然</label>
+            <label><input type="radio" name="q1" value="kappa" /> 在水邊嬉戲</label>
+          </div>
+          <div class="question">
+            <p>2.&nbsp;你的性格比較接近？</p>
+            <label><input type="radio" name="q2" value="kitsune" required /> 狡猾且善變</label>
+            <label><input type="radio" name="q2" value="oni" /> 直率且有力量</label>
+            <label><input type="radio" name="q2" value="yuki" /> 沉著安靜</label>
+            <label><input type="radio" name="q2" value="kappa" /> 好奇心旺盛</label>
+          </div>
+          <button type="submit" class="primary-btn">查看結果</button>
+          <button type="button" id="closeModal" class="secondary-btn">關閉</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 結果視窗 -->
+    <div class="modal hidden" id="resultModal">
+      <div class="modal-content">
+        <h2 id="resultTitle">結果</h2>
+        <p id="resultDesc"></p>
+        <button type="button" id="closeResult" class="primary-btn">關閉</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
